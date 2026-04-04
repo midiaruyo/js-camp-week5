@@ -57,7 +57,12 @@ const orders = [
  */
 function getProductById(products, productId) {
   // 請實作此函式
+  const isIdFound = products.some(item =>item.id === productId);
+  if(!isIdFound) 
+    return null
+  return products.find (item => item.id === productId )
 }
+
 
 /**
  * 2. 根據分類篩選產品
