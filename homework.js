@@ -72,6 +72,10 @@ function getProductById(products, productId) {
  */
 function getProductsByCategory(products, category) {
   // 請實作此函式
+  if (category === "全部") 
+    return products;
+
+  return products.filter((item) => item.category === category);
 }
 
 /**
@@ -82,6 +86,11 @@ function getProductsByCategory(products, category) {
  */
 function getDiscountRate(product) {
   // 請實作此函式
+  const origin_price = product.origin_price;
+  const price        = product.price;
+  if ( origin_price === 0 ) 
+    return "原價為0，無法計算";
+  return `${Math.round((price / origin_price) * 100) / 10}折)`;
 }
 
 /**
@@ -91,6 +100,12 @@ function getDiscountRate(product) {
  */
 function getAllCategories(products) {
   // 請實作此函式
+  const categories = [];
+  products.forEach(function (item) {
+    categories.push(item.category);
+  });
+  const uniqueCategories = [...new Set(categories)];
+  return uniqueCategories;
 }
 
 // ========================================
@@ -102,10 +117,17 @@ function getAllCategories(products) {
  * @param {Array} carts - 購物車陣列
  * @returns {number} - 回傳數字（原價 × 數量 的總和）
  */
+
 function calculateCartOriginalTotal(carts) {
   // 請實作此函式
+  return carts.reduce((acc, item) => {
+      const price     = item.product.origin_price;
+      const quantity  = item.quantity;
+      return acc + price * quantity;
+    },
+    0
+  );
 }
-
 /**
  * 2. 計算購物車售價總金額
  * @param {Array} carts - 購物車陣列
@@ -113,6 +135,13 @@ function calculateCartOriginalTotal(carts) {
  */
 function calculateCartTotal(carts) {
   // 請實作此函式
+    return carts.reduce((acc, item) => {
+      const price     = item.product.price;
+      const quantity  = item.quantity;
+      return acc + price * quantity;
+    },
+    0
+  );
 }
 
 /**
@@ -122,6 +151,7 @@ function calculateCartTotal(carts) {
  */
 function calculateSavings(carts) {
   // 請實作此函式
+  return calculateCartOriginalTotal(carts) - calculateCartTotal(carts);
 }
 
 /**
@@ -131,6 +161,10 @@ function calculateSavings(carts) {
  */
 function calculateCartItemCount(carts) {
   // 請實作此函式
+  return carts.reduce(
+    (acc,item) => acc+item.quantity,
+    0 
+  )
 }
 
 /**
