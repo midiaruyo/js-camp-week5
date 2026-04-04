@@ -57,10 +57,10 @@ const orders = [
  */
 function getProductById(products, productId) {
   // 請實作此函式
-  const isIdFound = products.some(item =>item.id === productId);
-  if(!isIdFound) 
+  const product= products.find (item => item.id === productId );
+  if(product===undefined) 
     return null
-  return products.find (item => item.id === productId )
+  return product
 }
 
 
