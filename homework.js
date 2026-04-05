@@ -56,7 +56,6 @@ const orders = [
  * @returns {Object|null} - 回傳產品物件，找不到回傳 null
  */
 function getProductById(products, productId) {
-  // 請實作此函式
   const product = products.find((item) => item.id === productId);
   if (product === undefined) 
     return null;
@@ -71,7 +70,6 @@ function getProductById(products, productId) {
  * @returns {Array} - 回傳符合分類的產品陣列，若 category 為 '全部' 則回傳全部產品
  */
 function getProductsByCategory(products, category) {
-  // 請實作此函式
   if (category === "全部") 
     return products;
 
@@ -99,7 +97,6 @@ function getDiscountRate(product) {
  * @returns {Array} - 回傳分類陣列，例如 ['衣服', '褲子', '鞋子', '配件']
  */
 function getAllCategories(products) {
-  // 請實作此函式
   const categories = [];
   products.forEach(function (item) {
     categories.push(item.category);
@@ -119,7 +116,6 @@ function getAllCategories(products) {
  */
 
 function calculateCartOriginalTotal(carts) {
-  // 請實作此函式
   return carts.reduce((acc, item) => {
       const price     = item.product.origin_price;
       const quantity  = item.quantity;
@@ -134,7 +130,6 @@ function calculateCartOriginalTotal(carts) {
  * @returns {number} - 回傳數字（售價 × 數量 的總和）
  */
 function calculateCartTotal(carts) {
-  // 請實作此函式
     return carts.reduce((acc, item) => {
       const price     = item.product.price;
       const quantity  = item.quantity;
@@ -164,7 +159,7 @@ function calculateCartItemCount(carts) {
   return carts.reduce(
     (acc,item) => acc+item.quantity,
     0 
-  )
+  );
 }
 
 /**
@@ -177,7 +172,7 @@ function isProductInCart(carts, productId) {
   // 請實作此函式
   return carts.some( 
     item => item.product.id === productId 
-  )
+  );
 }
 
 // ========================================
@@ -193,9 +188,27 @@ function isProductInCart(carts, productId) {
  * 如果產品已存在，合併數量；如果不存在，新增一筆
  */
 function addToCart(carts, product, quantity) {
-  // 請實作此函式
-}
 
+  // 如果產品物件已存在，更新產品物件數量，回傳購物車陣列
+  if (isProductInCart(carts, product.id)) {
+    return carts.map(item => {
+      if (item.product.id === product.id) {
+        //用展開運算子，複製原物件屬性到新物件，quantity 則加上傳入的數量
+        return { ...item, quantity: item.quantity + quantity };
+      }
+      return item;
+    });
+  }
+
+  // 如果產品物件不存在：回傳「包含新產品物件」的購物車陣列
+  const newItem = {
+    id: `cart-${carts.length + 1}`,
+    product,
+    quantity
+  };
+  return [...carts, newItem];
+
+}
 /**
  * 2. 更新購物車商品數量
  * @param {Array} carts - 購物車陣列
@@ -204,7 +217,14 @@ function addToCart(carts, product, quantity) {
  * @returns {Array} - 回傳新的購物車陣列，如果 newQuantity <= 0，移除該商品
  */
 function updateCartItemQuantity(carts, cartId, newQuantity) {
-  // 請實作此函式
+  // 如果找到 cartId 的物件，更新商品數量，回傳購物車陣列
+  const rtnCarts = carts.map( cart =>{
+    if( cart.id === cartId )
+      return {...cart, quantity:newQuantity}
+    return cart;
+  })
+  // 只回傳 quantity >0 的購物車陣列
+  return rtnCarts.filter((cart) => cart.quantity > 0);
 }
 
 /**
@@ -214,7 +234,8 @@ function updateCartItemQuantity(carts, cartId, newQuantity) {
  * @returns {Array} - 回傳移除後的新購物車陣列
  */
 function removeFromCart(carts, cartId) {
-  // 請實作此函式
+  //回傳不包含cartId物件的購物車陣列
+  return carts.filter( cart => cart.id !== cartId);
 }
 
 /**
@@ -222,7 +243,7 @@ function removeFromCart(carts, cartId) {
  * @returns {Array} - 回傳空陣列
  */
 function clearCart() {
-  // 請實作此函式
+  return []
 }
 
 // ========================================
