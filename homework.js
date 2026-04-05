@@ -88,7 +88,7 @@ function getDiscountRate(product) {
   const price        = product.price;
   if ( origin_price === 0 ) 
     return "原價為0，無法計算";
-  return `${Math.round((price / origin_price) * 100) / 10}折)`;
+  return `${Math.round((price / origin_price) * 100) / 10}折`;
 }
 
 /**
@@ -97,12 +97,7 @@ function getDiscountRate(product) {
  * @returns {Array} - 回傳分類陣列，例如 ['衣服', '褲子', '鞋子', '配件']
  */
 function getAllCategories(products) {
-  const categories = [];
-  products.forEach(function (item) {
-    categories.push(item.category);
-  });
-  const uniqueCategories = [...new Set(categories)];
-  return uniqueCategories;
+  return [...new Set(products.map((product) => product.category))];
 }
 
 // ========================================
